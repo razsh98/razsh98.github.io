@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!--include jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"
+    type="text/javascript"></script>
+    <title>
+        PACMAN 0.1 By Raz And Dvir
+    </title>
+    <link rel="icon" href="pac-man-x750.jpg">
+    <link href="style.css" rel="stylesheet" type="text/css" media="screen, projection"/>
+</head>
+<div class="header" display="inline">
+    <img src="pac-man-x750.jpg" height="50" width="70" class="logo"> </img>
+    <img src="menu_logo.jpg" height="50" width="120" class="logo"> </img>
+
+    <h3>dvir levi - 313355844 | raz shtrauchler -209087568 </h3>
+    <div class="header-right">
+        <ul>
+            <li><a class="active" onclick="swapDiv('welcomediv')">Welcome</a></li>
+            <li><a onclick="swapDiv('signupdiv')">Register</a></li>
+            <li><a onclick="swapDiv('logindiv')">Login</a></li>
+            <li><a id="aboutBtn" onclick="showAbout()">About</button></a></li>
+        </ul>
+
+    </div>
+</div>
+<body>
+    
+<div id="aboutModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeAbout()">&times;</span>
+        <h2>The Modal</h2>
+        <p>where are raz shtrauchler and dvir levi</p>
+        <p> we used the plugin of jQuery to get the inputs value from the user and make sure its correct.</p>
+        <p> we didnt used any template.</p>
+        <p>we had a hard time to get setting from the user and use them like. </p>
+    </div>
+</div>
+
+<div id="welcomediv" style="display:block">
+    <h1>Welcome!!! </h1>
+
+    <p>
+    <img src="pac-man-x750.jpg" height="50" width="70" class="logo"> </img>
+    <img src="menu_logo.jpg" height="50" width="120" class="logo"> </img>
+    </p>
+    <button type="button" class="myButton" onclick="swapDiv('logindiv')">login</button>
+    &nbsp;&nbsp; 
+    <button type="submit" class="myButton" onclick="swapDiv('signupdiv')" id="submitSignup" >Register</button>
+    <br>
+
+</div>
+
+<div id="signupdiv" style="display:none">
+    <br>
+    <h1>Sign Up</h1>
+    <form name="signupform" action="">
+        Username:<input id="suUser" name="suUser" type="text" onkeyup="validateSignup()"><p style="display:inline" id=suUserErr></p><br/>
+        Password:   <input id="suPass" name="suPass" type="password" onkeyup="validateSignup()"><p style="display:inline" id=suPassErr></p><br/>
+        First Name: <input id="suFname" name="suFname" type="text" onkeyup="validateSignup()"><p style="display:inline" id=suFnameErr></p><br/>
+        Last Name:  <input id="suLname" name="suLname" type="text" onkeyup="validateSignup()"><p style="display:inline" id=suLnameErr></p><br/>
+        Email:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     <input id="suEmail" name="suEmail" type="email" onkeyup="validateSignup()"><p style="display:inline" id=suEmailErr></p><br/>
+        Birthday:   <input id="suBday" name="suBday" type="date" onkeyup="validateSignup()" onmouseup="validateSignup()"><p style="display:inline" id=suBdayErr></p><br/>
+        <button type="submit" onclick="registerNewUser()" id="submitSignup" disabled>Register</button>
+    </form>
+    <br>
+
+    <button type="button" onclick="swapDiv('logindiv')">Already a member?</button>
+    <br>
+
+</div>
+
+<div id="logindiv" style="display:none">
+    <h1>Login</h1>
+    <form name="loginform" action="">
+        Username: &nbsp<input id="loginUser" name="loginUser" type="text" onkeyup="validateLogin()"><br/>
+        <br>
+        Password: &nbsp;<input id="loginPass" name="loginPass" type="password" onkeyup="validateLogin()"><br/>
+        <br>
+        <button type="button" onclick="authenticateUser()" id="submitLogin" disabled>Login</button><p style="display:inline" id=loginErr>
+        &nbsp;  &nbsp;  &nbsp;  
+        <button type="button" onclick="swapDiv('signupdiv')">Create new account</button></p>
+    </form>
+    <br>
+</div>
+
+<div id="gamediv" style="display:none"><p>
+    SCORE:<input id="lblScore" type="text"size="2"/>
+    TIME:<input id="lblTime" type="text" size="2"/>
+    LIFE:<input id="lblLife" type="text" size="2"/>
+    <p id="usernameGameDiv"></p>
+    <button onclick="Start();">start</button>&nbsp
+    <button onclick= "Reload();">restart</button>
+    </p>
+    <p>
+        <font color="pink">pink -enemy</font><br/>
+        <font color="blue">blue - slow motion</font>
+        <font color="green">green - more life</font><br/>
+        <font color="grey">grey - 5 points</font>
+        <font color="silver">silver - 15 points</font>
+        <font color="gold">gold - 25 points</font>
+        <font color="red">red - 50 points</font><br/>
+    </p>
+    <canvas id="canvas" height="600" width="600"  style="border: 50px solid gray;"></canvas>
+</div>
+
+<div id="configdiv" style="display:none">
+    <br>
+
+    <form name="config_form" action="">
+    Up key:<input type="text" id="form_up_key"><br/>
+    Down key:<input type="text" id="form_down_key"><br/>
+    Left key:<input type="text" id="form_left_key"><br/>
+    Right key:<input type="text" id="form_right_key"><br/>
+    Ghosts:<input type="range" id="no_of_ghosts" max="3" min="1" value="3" onmousemove="updateLabel('ghosts_label',this.value)"><p id="ghosts_label" style="display: inline"></p><br/>
+    Points:<input type="range" id="no_of_points" max="90" min="50" value="50" onmousemove="updateLabel('points_label',this.value)"><p id="points_label" style="display: inline"></p><br/>
+    Time:<input type="range" id="time" min="60" max="240" value="60" onmousemove="updateLabel('time_label',this.value)"><p id="time_label" style="display: inline"></p><br/>
+    <br>
+    <button type="button" onclick="randomiseInput()">Random</button>
+    <br>
+    <button type="button" onclick="saveSettings()">Save & Return to the game</button>
+    <br>
+    </form>
+</div>
+
+<footer>
+    Contact information - Dvir : <a href="mailto:dvil@post.bgu.ac.il">
+            dvil@post.bgu.ac.il</a>.<br><br>
+    Contact information - Raz : <a href="mailto:razsht@post.bgu.ac.il">
+            dvil@post.bgu.ac.il</a>.
+</footer>
+
+<script src="game.js"></script>
+</body>
+</html>
